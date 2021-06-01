@@ -1,23 +1,23 @@
-import seaborn as sns
-import matplotlib.pyplot as plt
+# Wykorzystując plik z zadania pierwszego utwórz wykres kołowy obrazujący informację
+# dotyczącą ilości cylindrów(kolumna „Cylinders”)w samochodach marki ford.
+# Procentowe wartości mają być zaokrąglone do dwóch miejsc po przecinku,
+# rozmiar czcionki na wykresie to 14, wyświetl legendę oraz tytuł wykresu.
+
 import pandas as pd
-import numpy as np
+import matplotlib.pyplot as plt
 
+df = pd.read_csv('cars.csv', header=0, sep=';', decimal='.') #wczytaj csv
 
-data = {'a': np.random.randint(0,100,100),              #wektor a losowy przedział 0,100
-        'b': np.random.randint(0,100,100),              #wektor b losowy przedział 0,100
-        'c': np.random.randint(0,8,100)                 #wektor c losowy przedział 0,8
-        }
-data['d'] = np.abs(data['a'] - data['b'])               #wektor d tworzony z a - b
+df = df[['Cylinders', 'Car name']]                   #wyciągnij 2kolumny
+df.sort_values("Car name")                           #posortuj po car name
+df2 = df[(df['Car name'].str[:4] == 'ford')]       #sprawdzanko czy pierwsze 4 litery to ford
+df3 = df2.groupby(['Cylinders']).agg({'Cylinders': ['count']})  #w df2 są tylko fordy
+                                                                #grupuje sie wedle cylindrów
+                                                                #+ liczy ile jest cylindrów
 
-df = pd.DataFrame(data)                                 #zrob z tego dataframe
+print(df3)
 
-wykres = sns.relplot(data=df,x='a',y='b',palette='Set2', size='d')      #deklaracja wykres seaborna
-
-
-plt.legend(loc='lower left')            #bla bla bla mat plot
-plt.xlabel("os x")
-plt.ylabel("os y")
-plt.title("Wykres punktowy")
-wykres.fig.set_size_inches(10, 10)
+wykres = df3.plot.pie(subplots=True, autopct='%.2f %%')
+plt.title('aaaa')
+plt.legend(loc=False)
 plt.show()
